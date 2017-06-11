@@ -20,7 +20,7 @@ for i in $(eval echo "{0..${NUM_CONTROLLERS}}"); do
 
     gcloud compute ssh controller${i} --command "sudo cp ca.pem kubernetes-key.pem kubernetes.pem /etc/etcd/"
 
-    gcloud compute ssh controller${i} --command "wget https://github.com/coreos/etcd/releases/download/v3.0.10/etcd-v3.0.10-linux-amd64.tar.gz"
+    gcloud compute ssh controller${i} --command "wget -q https://github.com/coreos/etcd/releases/download/v3.0.10/etcd-v3.0.10-linux-amd64.tar.gz"
 
     gcloud compute ssh controller${i} --command "tar -xvf etcd-v3.0.10-linux-amd64.tar.gz"
 

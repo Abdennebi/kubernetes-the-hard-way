@@ -23,7 +23,7 @@ for i in $(eval echo "{0..${NUM_WORKERS}}"); do
     gcloud compute ssh worker${i} --command "sudo cp ca.pem kubernetes-key.pem kubernetes.pem /var/lib/kubernetes/"
 
     # docker
-    gcloud compute ssh worker${i} --command "wget https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz"
+    gcloud compute ssh worker${i} --command "wget -q https://get.docker.com/builds/Linux/x86_64/docker-${DOCKER_VERSION}.tgz"
     gcloud compute ssh worker${i} --command "tar -xvf docker-${DOCKER_VERSION}.tgz"
     gcloud compute ssh worker${i} --command "sudo cp docker/docker* /usr/bin/"
     gcloud compute ssh worker${i} --command "sudo sh -c 'echo \"[Unit]
@@ -50,11 +50,11 @@ WantedBy=multi-user.target\" > /etc/systemd/system/docker.service'"
 
     # Download CNI and kubernetes components
     gcloud compute ssh worker${i} --command "sudo mkdir -p /opt/cni"
-    gcloud compute ssh worker${i} --command "wget https://storage.googleapis.com/kubernetes-release/network-plugins/cni-07a8a28637e97b22eb8dfe710eeae1344f69d16e.tar.gz"
+    gcloud compute ssh worker${i} --command "wget -q https://storage.googleapis.com/kubernetes-release/network-plugins/cni-07a8a28637e97b22eb8dfe710eeae1344f69d16e.tar.gz"
     gcloud compute ssh worker${i} --command "sudo tar -xvf cni-07a8a28637e97b22eb8dfe710eeae1344f69d16e.tar.gz -C /opt/cni"
-    gcloud compute ssh worker${i} --command "wget https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
-    gcloud compute ssh worker${i} --command "wget https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kube-proxy"
-    gcloud compute ssh worker${i} --command "wget https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubelet"
+    gcloud compute ssh worker${i} --command "wget -q https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubectl"
+    gcloud compute ssh worker${i} --command "wget -q https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kube-proxy"
+    gcloud compute ssh worker${i} --command "wget -q https://storage.googleapis.com/kubernetes-release/release/${KUBERNETES_VERSION}/bin/linux/amd64/kubelet"
     gcloud compute ssh worker${i} --command "chmod +x kubectl kube-proxy kubelet"
     gcloud compute ssh worker${i} --command "sudo mv kubectl kube-proxy kubelet /usr/bin/"
 
