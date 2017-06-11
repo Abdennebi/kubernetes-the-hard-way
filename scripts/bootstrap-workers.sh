@@ -97,7 +97,6 @@ ExecStart=/usr/bin/kubelet \
   --docker=unix:///var/run/docker.sock \
   --network-plugin=kubenet \
   --kubeconfig=/var/lib/kubelet/kubeconfig \
-  --reconcile-cidr=true \
   --serialize-image-pulls=false \
   --tls-cert-file=/var/lib/kubernetes/kubernetes.pem \
   --tls-private-key-file=/var/lib/kubernetes/kubernetes-key.pem \
