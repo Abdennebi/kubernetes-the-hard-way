@@ -11,6 +11,11 @@ if [[ ! ${KUBERNETES_VERSION} =~ ^v[0-9].[0-9].[0-9]$ ]]; then
     exit 1
 fi
 
+if [[ -z ${REGION} ]]; then
+    echo "Must define a region"
+    exit 1
+fi
+
 ./start-infra-gcp.sh
 ./setup-ca.sh
 ./bootstrap-etcd.sh
