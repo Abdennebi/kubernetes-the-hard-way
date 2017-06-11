@@ -162,4 +162,3 @@ gcloud compute forwarding-rules create kubernetes-rule \
   --address ${KUBERNETES_PUBLIC_ADDRESS} \
   --ports 6443 \
   --target-pool kubernetes-pool \
-  --region us-central1
