@@ -113,6 +113,6 @@ for i in $(eval echo "{0..${NUM_WORKERS}}"); do
 done
 
 for host in ${kube_hosts}; do
-  gcloud compute copy-files ca.pem kubernetes-key.pem kubernetes.pem ${host}:~/
+  gcloud compute scp ca.pem kubernetes-key.pem kubernetes.pem ${host}:~/
   sleep 2
 done
