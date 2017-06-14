@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -x
 
-kubectl run nginx --image=nginx --port=80 --replicas=3
+gcloud compute ssh controller1 --command "kubectl run nginx --image=nginx --port=80 --replicas=3"
 
-kubectl get pods -o wide
+gcloud compute ssh controller1 --command "kubectl get pods -o wide"
 
-sleep 10
+gcloud compute ssh controller1 --command "sleep 10"
 
-kubectl expose deployment nginx --type NodePort
+gcloud compute ssh controller1 --command "kubectl expose deployment nginx --type NodePort"
 
-NODE_PORT=$(kubectl get svc nginx --output=jsonpath='{range .spec.ports[0]}{.nodePort}')
+NODE_PORT=$(gcloud compute ssh controller1 --command "kubectl get svc nginx --output=jsonpath='{range .spec.ports[0]}{.nodePort}'")
 
 gcloud compute firewall-rules create kubernetes-nginx-service \
   --allow=tcp:${NODE_PORT} \
