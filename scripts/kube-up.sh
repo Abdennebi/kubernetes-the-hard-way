@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 set -x
 
+export NUM_CONTROLLERS=3
+export NUM_WORKERS=3
+export KUBERNETES_VERSION=v1.6.4
+
 if [[ -z ${NUM_CONTROLLERS} || -z ${NUM_WORKERS} || -z ${KUBERNETES_VERSION} ]]; then
     echo "Must set NUM_CONTROLLERS, NUM_WORKERS and KUBERNETES_VERSION (e.g. 'vX.Y.Z') environment variables"
     exit 1
