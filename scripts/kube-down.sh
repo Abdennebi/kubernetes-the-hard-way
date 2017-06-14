@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 set -x
 
+gcloud config set compute/region europe-west1
+gcloud config set compute/zone europe-west1-b
+
+export NUM_CONTROLLERS=3
+export NUM_WORKERS=3
+export KUBERNETES_VERSION=v1.6.4
+export REGION=europe-west1
+
 if [[ -z ${NUM_CONTROLLERS} || -z ${NUM_WORKERS} ]]; then
     echo "Must set NUM_CONTROLLERS and NUM_WORKERS env vars"
     exit 1
