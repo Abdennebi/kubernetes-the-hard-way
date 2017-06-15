@@ -63,7 +63,7 @@ for i in $(eval echo "{0..${NUM_CONTROLLERS}}"); do
      --can-ip-forward \
      --image ubuntu-1604-xenial-v20160921 \
      --image-project ubuntu-os-cloud \
-     --machine-type g1-small \
+     --machine-type n1-standard-1 \
      --private-network-ip 10.240.0.1${i} \
      --subnet kubernetes
 done
@@ -75,7 +75,7 @@ for i in $(eval echo "{0..${NUM_WORKERS}}"); do
      --can-ip-forward \
      --image ubuntu-1604-xenial-v20160921 \
      --image-project ubuntu-os-cloud \
-     --machine-type n1-standard-1 \
+     --machine-type n1-standard-2 \
      --private-network-ip 10.240.0.2${i} \
      --subnet kubernetes
 done
