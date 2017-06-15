@@ -155,7 +155,7 @@ hosts=$(echo ${hosts} | sed 's/,$//')
 gcloud compute target-pools add-instances kubernetes-pool \
   --instances ${hosts}
 
-KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes \
+KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes  --region ${REGION} \
   --format 'value(address)')
 
 gcloud compute forwarding-rules create kubernetes-rule \

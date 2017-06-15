@@ -45,7 +45,7 @@ cfssl gencert -initca ca-csr.json | cfssljson -bare ca
 # Verify
 openssl x509 -in ca.pem -text -noout
 
-KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes \
+KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes  --region ${REGION} \
   --format 'value(address)')
 
 # Order is inefficient but set up to match original example

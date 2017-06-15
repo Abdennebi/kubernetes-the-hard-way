@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -x
 
-KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes \
+KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes --region ${REGION} \
   --format 'value(address)')
 
 kubectl config set-cluster kubernetes-the-hard-way \
