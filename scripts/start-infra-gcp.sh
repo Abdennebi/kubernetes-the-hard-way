@@ -65,7 +65,7 @@ for i in $(eval echo "{0..${NUM_CONTROLLERS}}"); do
      --image-project ubuntu-os-cloud \
      --machine-type n1-standard-1 \
      --private-network-ip 10.240.0.1${i} \
-     --subnet kubernetes
+     --subnet kubernetes &
 done
 
 # Kubernetes workers
@@ -77,5 +77,7 @@ for i in $(eval echo "{0..${NUM_WORKERS}}"); do
      --image-project ubuntu-os-cloud \
      --machine-type n1-standard-2 \
      --private-network-ip 10.240.0.2${i} \
-     --subnet kubernetes
+     --subnet kubernetes &
 done
+
+wait
