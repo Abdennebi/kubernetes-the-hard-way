@@ -122,19 +122,9 @@ In this section we will generate a TLS certificate that will be valid for all Ku
 
 ### Set the Kubernetes Public Address
 
-#### GCE
-
 ```
 KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes \
   --format 'value(address)')
-```
-
-#### AWS
-
-```
-KUBERNETES_PUBLIC_ADDRESS=$(aws elb describe-load-balancers \
-  --load-balancer-name kubernetes | \
-  jq -r '.LoadBalancerDescriptions[].DNSName')
 ```
 
 ---
@@ -212,8 +202,6 @@ Set the list of Kubernetes hosts where the certs should be copied to:
 KUBERNETES_HOSTS=(controller0 controller1 controller2 worker0 worker1 worker2)
 ```
 
-### GCE
-
 The following command will:
 
 * Copy the TLS certificates and keys to each Kubernetes host using the `gcloud compute copy-files` command.
@@ -221,21 +209,5 @@ The following command will:
 ```
 for host in ${KUBERNETES_HOSTS[*]}; do
   gcloud compute copy-files ca.pem kubernetes-key.pem kubernetes.pem ${host}:~/
-done
-```
-
-### AWS
-
-The following command will:
- * Extract the public IP address for each Kubernetes host
- * Copy the TLS certificates and keys to each Kubernetes host using `scp`
-
-```
-for host in ${KUBERNETES_HOSTS[*]}; do
-  PUBLIC_IP_ADDRESS=$(aws ec2 describe-instances \
-    --filters "Name=tag:Name,Values=${host}" | \
-    jq -r '.Reservations[].Instances[].PublicIpAddress')
-  scp ca.pem kubernetes-key.pem kubernetes.pem \
-    ubuntu@${PUBLIC_IP_ADDRESS}:~/
 done
 ```

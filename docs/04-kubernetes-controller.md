@@ -29,7 +29,7 @@ Run the following commands on `controller0`, `controller1`, `controller2`:
 
 ### TLS Certificates
 
-The TLS certificates created in the [Setting up a CA and TLS Cert Generation](02-certificate-authority.md) lab will be used to secure communication between the Kubernetes API server and Kubernetes clients such as `kubectl` and the `kubelet` agent. The TLS certificates will also be used to authenticate the Kubernetes API server to etcd via TLC client auth.
+The TLS certificates created in the [Setting up a CA and TLS Cert Generation](02-certificate-authority.md) lab will be used to secure communication between the Kubernetes API server and Kubernetes clients such as `kubectl` and the `kubelet` agent. The TLS certificates will also be used to authenticate the Kubernetes API server to etcd via TLS client auth.
 
 Copy the TLS certificates to the Kubernetes configuration directory:
 
@@ -125,17 +125,9 @@ sudo mv authorization-policy.jsonl /var/lib/kubernetes/
 
 Capture the internal IP address:
 
-#### GCE
-
 ```
 INTERNAL_IP=$(curl -s -H "Metadata-Flavor: Google" \
   http://metadata.google.internal/computeMetadata/v1/instance/network-interfaces/0/ip)
-```
-
-#### AWS
-
-```
-INTERNAL_IP=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4)
 ```
 
 ---
@@ -302,8 +294,6 @@ etcd-2               Healthy   {"health": "true"}
 
 The virtual machines created in this tutorial will not have permission to complete this section. Run the following commands from the same place used to create the virtual machines for this tutorial. 
 
-### GCE
-
 ```
 gcloud compute http-health-checks create kube-apiserver-check \
   --description "Kubernetes API Server Health Check" \
@@ -331,12 +321,4 @@ gcloud compute forwarding-rules create kubernetes-rule \
   --address ${KUBERNETES_PUBLIC_ADDRESS} \
   --ports 6443 \
   --target-pool kubernetes-pool
-```
-
-### AWS
-
-```
-aws elb register-instances-with-load-balancer \
-  --load-balancer-name kubernetes \
-  --instances ${CONTROLLER_0_INSTANCE_ID} ${CONTROLLER_1_INSTANCE_ID} ${CONTROLLER_2_INSTANCE_ID}
 ```

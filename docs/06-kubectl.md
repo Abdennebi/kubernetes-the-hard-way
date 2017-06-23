@@ -22,21 +22,11 @@ sudo mv kubectl /usr/local/bin
 
 In this section you will configure the kubectl client to point to the [Kubernetes API Server Frontend Load Balancer](04-kubernetes-controller.md#setup-kubernetes-api-server-frontend-load-balancer).
 
-### GCE
 
 ```
 KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes \
   --format 'value(address)')
 ```
-
-### AWS
-
-```
-KUBERNETES_PUBLIC_ADDRESS=$(aws elb describe-load-balancers \
-  --load-balancer-name kubernetes | \
-  jq -r '.LoadBalancerDescriptions[].DNSName')
-```
----
 
 Recall the token we setup for the admin user:
 
