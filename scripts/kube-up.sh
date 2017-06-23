@@ -24,15 +24,15 @@ if [[ -z ${REGION} ]]; then
     exit 1
 fi
 
-./start-infra-gcp.sh
-./setup-ca.sh
-./bootstrap-etcd.sh
-./bootstrap-controllers.sh
-./bootstrap-workers.sh
-./kubectl-remote-access.sh
-./create-routes.sh
-./deploy-dns.sh
-./smoke-test.sh
+./00-start-infra-gcp.sh
+./01-setup-ca.sh
+./02-bootstrap-etcd.sh
+./03-bootstrap-controllers.sh
+./04-bootstrap-workers.sh
+./05-kubectl-remote-access.sh
+./06-create-routes.sh
+./07-deploy-dns.sh
+./08-smoke-test.sh
 #./cleanup.sh
 
 echo "==================== ${0} COMPLETE ===================="
