@@ -51,7 +51,7 @@ This tutorial assumes you have access to :
 
 While GCP will be used for basic infrastructure needs, the things learned in this tutorial apply to every platform.
 
-* [Cloud Infrastructure Provisioning](docs/01-infrastructure.md)
+* [Cloud Infrastructure Provisioning](docs/01-infrastructure-gcp.md)
 * [Setting up a CA and TLS Cert Generation](docs/02-certificate-authority.md)
 * [Bootstrapping an H/A etcd cluster](docs/03-etcd.md)
 * [Bootstrapping an H/A Kubernetes Control Plane](docs/04-kubernetes-controller.md)
