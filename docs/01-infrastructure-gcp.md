@@ -43,67 +43,45 @@ Create a subnet for the Kubernetes cluster:
 
 ```
 gcloud compute networks subnets create kubernetes \
-  --network kubernetes \
-  --range 10.240.0.0/24
+  --network kubernetes-the-hard-way \
+  --range 10.240.0.0/24 \
+  --region us-central1
 ```
 
 ### Firewall Rules
 
 ```
-gcloud compute firewall-rules create kubernetes-allow-icmp \
-  --allow icmp \
-  --network kubernetes \
-  --source-ranges 0.0.0.0/0 
+gcloud compute firewall-rules create allow-internal \
+  --allow tcp,udp,icmp \
+  --network kubernetes-the-hard-way \
+  --source-ranges 10.240.0.0/24,10.200.0.0/16
 ```
 
 ```
-gcloud compute firewall-rules create kubernetes-allow-internal \
-  --allow tcp:0-65535,udp:0-65535,icmp \
-  --network kubernetes \
-  --source-ranges 10.240.0.0/24
-```
-
-```
-gcloud compute firewall-rules create kubernetes-allow-rdp \
-  --allow tcp:3389 \
-  --network kubernetes \
+gcloud compute firewall-rules create allow-external \
+  --allow tcp:22,tcp:3389,tcp:6443,icmp \
+  --network kubernetes-the-hard-way \
   --source-ranges 0.0.0.0/0
 ```
 
 ```
-gcloud compute firewall-rules create kubernetes-allow-ssh \
-  --allow tcp:22 \
-  --network kubernetes \
-  --source-ranges 0.0.0.0/0
-```
-
-```
-gcloud compute firewall-rules create kubernetes-allow-healthz \
+gcloud compute firewall-rules create allow-healthz \
   --allow tcp:8080 \
-  --network kubernetes \
-  --source-ranges 130.211.0.0/22
+  --network kubernetes-the-hard-way \
+  --source-ranges 130.211.0.0/22,35.191.0.0/16
+```
+
+Verify :
+
+```
+gcloud compute firewall-rules list --filter "network=kubernetes-the-hard-way"
 ```
 
 ```
-gcloud compute firewall-rules create kubernetes-allow-api-server \
-  --allow tcp:6443 \
-  --network kubernetes \
-  --source-ranges 0.0.0.0/0
-```
-
-
-```
-gcloud compute firewall-rules list --filter "network=kubernetes"
-```
-
-```
-NAME                         NETWORK     SRC_RANGES      RULES                         SRC_TAGS  TARGET_TAGS
-kubernetes-allow-api-server  kubernetes  0.0.0.0/0       tcp:6443
-kubernetes-allow-healthz     kubernetes  130.211.0.0/22  tcp:8080
-kubernetes-allow-icmp        kubernetes  0.0.0.0/0       icmp
-kubernetes-allow-internal    kubernetes  10.240.0.0/24   tcp:0-65535,udp:0-65535,icmp
-kubernetes-allow-rdp         kubernetes  0.0.0.0/0       tcp:3389
-kubernetes-allow-ssh         kubernetes  0.0.0.0/0       tcp:22
+NAME            NETWORK                  SRC_RANGES                   RULES                          SRC_TAGS  TARGET_TAGS
+allow-external  kubernetes-the-hard-way  0.0.0.0/0                    tcp:22,tcp:3389,tcp:6443,icmp
+allow-healthz   kubernetes-the-hard-way  130.211.0.0/22               tcp:8080
+allow-internal  kubernetes-the-hard-way  10.240.0.0/24,10.200.0.0/16  tcp,udp,icmp
 ```
 
 ### Kubernetes Public Address
@@ -111,15 +89,16 @@ kubernetes-allow-ssh         kubernetes  0.0.0.0/0       tcp:22
 Create a public IP address that will be used by remote clients to connect to the Kubernetes control plane:
 
 ```
-gcloud compute addresses create kubernetes --region=us-central1
+gcloud compute addresses create kubernetes-the-hard-way --region=us-central1
+
 ```
 
 ```
-gcloud compute addresses list kubernetes
+gcloud compute addresses list kubernetes-the-hard-way
 ```
 ```
-NAME        REGION       ADDRESS          STATUS
-kubernetes  us-central1  XXX.XXX.XXX.XXX  RESERVED
+NAME                     REGION       ADDRESS          STATUS
+kubernetes-the-hard-way  us-central1  XXX.XXX.XXX.XXX  RESERVED
 ```
 
 ## Provision Virtual Machines
@@ -134,7 +113,7 @@ All the VMs in this lab will be provisioned using Ubuntu 16.04 mainly because it
 gcloud compute instances create controller0 \
  --boot-disk-size 200GB \
  --can-ip-forward \
- --image ubuntu-1604-xenial-v20160921 \
+ --image ubuntu-1604-xenial-v20170307 \
  --image-project ubuntu-os-cloud \
  --machine-type n1-standard-1 \
  --private-network-ip 10.240.0.10 \
@@ -145,7 +124,7 @@ gcloud compute instances create controller0 \
 gcloud compute instances create controller1 \
  --boot-disk-size 200GB \
  --can-ip-forward \
- --image ubuntu-1604-xenial-v20160921 \
+ --image ubuntu-1604-xenial-v20170307 \
  --image-project ubuntu-os-cloud \
  --machine-type n1-standard-1 \
  --private-network-ip 10.240.0.11 \
@@ -156,7 +135,7 @@ gcloud compute instances create controller1 \
 gcloud compute instances create controller2 \
  --boot-disk-size 200GB \
  --can-ip-forward \
- --image ubuntu-1604-xenial-v20160921 \
+ --image ubuntu-1604-xenial-v20170307 \
  --image-project ubuntu-os-cloud \
  --machine-type n1-standard-1 \
  --private-network-ip 10.240.0.12 \
@@ -169,7 +148,7 @@ gcloud compute instances create controller2 \
 gcloud compute instances create worker0 \
  --boot-disk-size 200GB \
  --can-ip-forward \
- --image ubuntu-1604-xenial-v20160921 \
+ --image ubuntu-1604-xenial-v20170307 \
  --image-project ubuntu-os-cloud \
  --machine-type n1-standard-1 \
  --private-network-ip 10.240.0.20 \
@@ -180,7 +159,7 @@ gcloud compute instances create worker0 \
 gcloud compute instances create worker1 \
  --boot-disk-size 200GB \
  --can-ip-forward \
- --image ubuntu-1604-xenial-v20160921 \
+ --image ubuntu-1604-xenial-v20170307 \
  --image-project ubuntu-os-cloud \
  --machine-type n1-standard-1 \
  --private-network-ip 10.240.0.21 \
@@ -191,7 +170,7 @@ gcloud compute instances create worker1 \
 gcloud compute instances create worker2 \
  --boot-disk-size 200GB \
  --can-ip-forward \
- --image ubuntu-1604-xenial-v20160921 \
+ --image ubuntu-1604-xenial-v20170307 \
  --image-project ubuntu-os-cloud \
  --machine-type n1-standard-1 \
  --private-network-ip 10.240.0.22 \

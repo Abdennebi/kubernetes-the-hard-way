@@ -1,12 +1,12 @@
-# Setting up a Certificate Authority and TLS Cert Generation
+# Setting up a Certificate Authority and TLS Certificates
 
-In this lab you will setup the necessary PKI infrastructure to secure the Kubernetes components. This lab will leverage CloudFlare's PKI toolkit, [cfssl](https://github.com/cloudflare/cfssl), to bootstrap a Certificate Authority and generate TLS certificates.
-
-In this lab you will generate a single set of TLS certificates that can be used to secure the following Kubernetes components:
+In this lab you will setup the necessary PKI infrastructure to secure the Kubernetes components. This lab will leverage 
+CloudFlare's PKI toolkit, [cfssl](https://github.com/cloudflare/cfssl), to bootstrap a Certificate Authority and 
+generate TLS certificates to secure the following Kubernetes components:
 
 * etcd
-* Kubernetes API Server
-* Kubernetes Kubelet
+* kube-apiserver
+* kubelet
 
 > In production you should strongly consider generating individual TLS certificates for each component.
 
@@ -55,10 +55,11 @@ sudo mv cfssljson_linux-amd64 /usr/local/bin/cfssljson
 
 ## Setting up a Certificate Authority
 
-### Create the CA configuration file
+Create the CA configuration file
 
 ```
-echo '{
+cat > ca-config.json <<EOF
+{
   "signing": {
     "default": {
       "expiry": "8760h"
@@ -70,15 +71,15 @@ echo '{
       }
     }
   }
-}' > ca-config.json
+}
+EOF
 ```
 
-### Generate the CA certificate and private key
-
-Create the CA CSR:
+Create a CA certificate signing request:
 
 ```
-echo '{
+cat > ca-csr.json <<EOF
+{
   "CN": "Kubernetes",
   "key": {
     "algo": "rsa",
@@ -93,7 +94,8 @@ echo '{
       "ST": "Oregon"
     }
   ]
-}' > ca-csr.json
+}
+EO
 ```
 
 Generate the CA certificate and private key:
@@ -106,11 +108,10 @@ Results:
 
 ```
 ca-key.pem
-ca.csr
 ca.pem
 ```
 
-### Verification
+Verification :
 
 ```
 openssl x509 -in ca.pem -text -noout
@@ -188,13 +189,13 @@ kubernetes.csr
 kubernetes.pem
 ```
 
-### Verification
+Verification :
 
 ```
 openssl x509 -in kubernetes.pem -text -noout
 ```
 
-## Copy TLS Certs
+## Distribute the TLS certificates
 
 Set the list of Kubernetes hosts where the certs should be copied to:
 

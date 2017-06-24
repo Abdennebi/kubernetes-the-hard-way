@@ -40,6 +40,8 @@ gcloud compute firewall-rules create kubernetes-allow-ssh \
   --network kubernetes \
   --source-ranges 0.0.0.0/0
 
+Please check : https://cloud.google.com/compute/docs/load-balancing/health-checks
+
 gcloud compute firewall-rules create kubernetes-allow-healthz \
   --allow tcp:8080 \
   --network kubernetes \
