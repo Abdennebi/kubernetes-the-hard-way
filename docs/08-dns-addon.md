@@ -10,7 +10,7 @@ In this lab you will deploy the DNS add-on which is required for every Kubernete
 ### Create the `kubedns` service:
 
 ```
-kubectl create -f https://raw.githubusercontent.com/kelseyhightower/kubernetes-the-hard-way/master/services/kubedns.yaml
+kubectl create -f https://raw.githubusercontent.com/abdennebi/kubernetes-the-hard-way/master/services/kubedns.yaml
 ```
 
 #### Verification
@@ -26,7 +26,7 @@ kube-dns   10.32.0.10   <none>        53/UDP,53/TCP   5s
 ### Create the `kubedns` deployment:
 
 ```
-kubectl create -f https://raw.githubusercontent.com/kelseyhightower/kubernetes-the-hard-way/master/deployments/kubedns.yaml
+kubectl create -f https://raw.githubusercontent.com/abdennebi/kubernetes-the-hard-way/master/deployments/kubedns.yaml
 ```
 
 #### Verification
